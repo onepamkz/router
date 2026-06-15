@@ -1,0 +1,14 @@
+# Секреты
+.env
+corp-ca.pem
+
+# Исходники компонентов — это git submodules, не файлы этого репозитория.
+# Клонируются командой: make clone  или  make clone-forks ORG=ваш-юзер
+sources/core/
+sources/lina/
+sources/luna/
+sources/koko/
+sources/lion/
+sources/magnus/
+sources/chen/
+sources/web/

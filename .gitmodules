@@ -1,0 +1,25 @@
+# Замените onepamkz на ваш GitHub аккаунт.
+
+[submodule "sources/core"]
+    path = sources/core
+    url  = https://github.com/onepamkz/core.git
+
+[submodule "sources/lina"]
+    path = sources/lina
+    url  = https://github.com/onepamkz/proxy.git
+
+[submodule "sources/luna"]
+    path = sources/luna
+    url  = https://github.com/onepamkz/atlas.git
+
+[submodule "sources/koko"]
+    path = sources/koko
+    url  = https://github.com/onepamkz/gateway.git
+
+[submodule "sources/lion"]
+    path = sources/lion
+    url  = https://github.com/onepamkz/switch.git
+
+[submodule "sources/chen"]
+    path = sources/chen
+    url  = https://github.com/onepamkz/relay.git
