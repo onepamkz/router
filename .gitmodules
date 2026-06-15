@@ -1,4 +1,4 @@
-# Замените onepamkz на ваш GitHub аккаунт.
+# Git submodules — onepamkz organisation.
 
 [submodule "sources/core"]
     path = sources/core
