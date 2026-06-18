@@ -60,9 +60,7 @@ services:
     image: ${IMAGE_PREFIX:-one-pam}/core:${VERSION}
     build:
       context: sources/core
-      dockerfile: Dockerfile-ce
-      args:
-        GOPROXY: "https://proxy.golang.org,direct"
+      dockerfile: Dockerfile
     container_name: ${PREFIX:-one-pam}-core
     <<: [*restart, *logging]
     environment:
@@ -94,8 +92,9 @@ services:
       REDIS_HOST:      redis
       REDIS_PORT:      6379
       REDIS_PASSWORD:  ${REDIS_PASSWORD}
+      SSHD_PORT:       ${SSH_PORT:-2222}
     ports:
-      - "${SSH_PORT:-2222}:2222"
+      - "${SSH_PORT:-2222}:${SSH_PORT:-2222}"
     volumes:
       - koko_data:/opt/koko/data
     depends_on:
@@ -128,18 +127,8 @@ services:
       CORE_HOST:       http://core:8080
       BOOTSTRAP_TOKEN: ${BOOTSTRAP_TOKEN}
       LOG_LEVEL:       ${LOG_LEVEL:-ERROR}
-    depends_on:
-      core: { condition: service_healthy }
-    networks: [backend]
-
-  kael:
-    image: jumpserver/kael:${VERSION}
-    container_name: ${PREFIX:-one-pam}-kael
-    <<: [*restart, *logging]
-    environment:
-      CORE_HOST:       http://core:8080
-      BOOTSTRAP_TOKEN: ${BOOTSTRAP_TOKEN}
-      LOG_LEVEL:       ${LOG_LEVEL:-ERROR}
+    volumes:
+      - chen_data:/opt/chen/data
     depends_on:
       core: { condition: service_healthy }
     networks: [backend]
@@ -153,6 +142,14 @@ services:
         VERSION: ${VERSION}
     container_name: ${PREFIX:-one-pam}-web
     <<: [*restart, *logging]
+    environment:
+      HTTP_PORT:      ${HTTP_PORT:-80}
+      CORE_ENABLED:   1
+      KOKO_ENABLED:   1
+      LION_ENABLED:   1
+      CHEN_ENABLED:   1
+      KAEL_ENABLED:   0
+      RAZOR_ENABLED:  0
     ports:
       - "${HTTP_PORT:-80}:80"
       - "${HTTPS_PORT:-443}:443"
@@ -162,7 +159,7 @@ services:
       core: { condition: service_healthy }
       koko: { condition: service_started }
       lion: { condition: service_started }
-      kael: { condition: service_started }
+      chen: { condition: service_started }
     networks: [backend, frontend]
 
 networks:
@@ -176,3 +173,4 @@ volumes:
   core_logs:
   koko_data:
   lion_data:
+  chen_data:

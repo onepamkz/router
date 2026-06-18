@@ -1,4 +1,4 @@
-ARG VERSION=v3.10.7
+ARG VERSION=v4.10.16
 
 # ── Lina (Vue.js) ─────────────────────────────────────────────────────────────
 FROM node:16-bullseye-slim AS lina
@@ -12,7 +12,7 @@ COPY sources/lina/ .
 RUN yarn install
 RUN yarn build
 
-# ── Luna (Angular 8 web terminal) ─────────────────────────────────────────────
+# ── Luna (Angular web terminal) ───────────────────────────────────────────────
 FROM node:16-bullseye-slim AS luna
 COPY corp-ca.pem /tmp/corp-ca.crt
 RUN apt-get update -qq && apt-get install -y --no-install-recommends ca-certificates \
