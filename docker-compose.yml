@@ -9,9 +9,9 @@ x-restart: &restart
 x-core-env: &core-env
   SECRET_KEY:      ${SECRET_KEY}
   BOOTSTRAP_TOKEN: ${BOOTSTRAP_TOKEN}
-  DB_ENGINE:       mysql
+  DB_ENGINE:       postgresql
   DB_HOST:         db
-  DB_PORT:         3306
+  DB_PORT:         5432
   DB_NAME:         ${DB_NAME:-jumpserver}
   DB_USER:         ${DB_USER:-jumpserver}
   DB_PASSWORD:     ${DB_PASSWORD}
@@ -25,19 +25,18 @@ services:
   # ── Инфраструктура ────────────────────────────────────────────────────────
 
   db:
-    image: mariadb:10.11
+    image: postgres:16-alpine
     container_name: ${PREFIX:-one-pam}-db
     <<: [*restart, *logging]
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-      MYSQL_DATABASE:      ${DB_NAME:-jumpserver}
-      MYSQL_USER:          ${DB_USER:-jumpserver}
-      MYSQL_PASSWORD:      ${DB_PASSWORD}
+      POSTGRES_DB:       ${DB_NAME:-jumpserver}
+      POSTGRES_USER:     ${DB_USER:-jumpserver}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
-      - db_data:/var/lib/mysql
+      - db_data:/var/lib/postgresql/data
     networks: [backend]
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-u", "root", "-p${DB_ROOT_PASSWORD}"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-jumpserver} -d ${DB_NAME:-jumpserver}"]
       interval: 10s
       retries: 10
       start_period: 30s
