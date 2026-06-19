@@ -73,7 +73,7 @@ services:
       - core_logs:/opt/jumpserver/logs
     networks: [backend]
     healthcheck:
-      test: ["CMD", "curl", "-fs", "http://localhost:8080/api/health/"]
+      test: ["CMD", "/opt/py3/bin/python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8080/api/health/')"]
       interval: 20s
       retries: 15
       start_period: 120s
